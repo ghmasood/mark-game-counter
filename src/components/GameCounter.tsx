@@ -23,6 +23,7 @@ export default function GameCounter() {
   const [newRound, setNewRound] = useState({ WE: 0, YOU: 165 });
   const [validationError, setValidationError] = useState<string | null>(null);
   const [targetInput, setTargetInput] = useState('');
+  const [showConfirm, setShowConfirm] = useState(false);
   const [selectedSuit, setSelectedSuit] = useState<
     '♠️' | '♥️' | '♦️' | '♣️' | null
   >(null);
@@ -75,6 +76,15 @@ export default function GameCounter() {
       }
     }
 
+    // Apply bonus rule: if target setter gets all points (165), they get 330 bonus
+    if (currentTargetSetter === team && value === 165) {
+      setNewRound(team === 'WE' ? { WE: 330, YOU: 0 } : { WE: 0, YOU: 330 });
+      if (validationError) {
+        setValidationError(null);
+      }
+      return;
+    }
+
     setNewRound(newScores);
 
     // Clear validation error when user is typing
@@ -84,7 +94,10 @@ export default function GameCounter() {
   };
 
   const getProgressPercentage = (score: number) => {
-    return Math.min((score / 1100) * 100, 100);
+    // Calculate max possible score based on rounds played
+    const maxPossibleScore = rounds.length * 330; // Worst case: all rounds are 330-0
+    const targetScore = Math.max(1100, maxPossibleScore);
+    return Math.min((score / targetScore) * 100, 100);
   };
 
   const validScoreOptions = getValidScoreOptions();
@@ -110,7 +123,9 @@ export default function GameCounter() {
           <h3 className='text-sm font-semibold text-blue-600 mb-1'>ما</h3>
           <div className='text-3xl font-bold text-blue-600 mb-1'>
             {total.WE.toLocaleString('fa')}
-            <span className='text-sm px-1'>/{(1100).toLocaleString('fa')}</span>
+            <span className='text-sm px-1'>
+              /{Math.max(1100, rounds.length * 330).toLocaleString('fa')}
+            </span>
           </div>
           <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden'>
             <div
@@ -123,7 +138,9 @@ export default function GameCounter() {
           <h3 className='text-sm font-semibold text-red-600 mb-1'>شما</h3>
           <div className='text-3xl font-bold text-red-600 mb-1'>
             {total.YOU.toLocaleString('fa')}
-            <span className='text-sm px-1'>/{(1100).toLocaleString('fa')}</span>
+            <span className='text-sm px-1'>
+              /{Math.max(1100, rounds.length * 330).toLocaleString('fa')}
+            </span>
           </div>
           <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden'>
             <div
@@ -234,23 +251,54 @@ export default function GameCounter() {
           <div className='mb-3'>
             <p className='text-xs text-gray-600 mb-2'>انتخاب سریع:</p>
             <div className='grid grid-cols-3 gap-2'>
-              {validScoreOptions
-                .filter((option) => {
-                  if (currentTargetSetter === 'WE') {
-                    return option.WE >= currentTarget || option.WE === 0;
-                  } else {
-                    return option.YOU >= currentTarget || option.YOU === 0;
-                  }
+              {(
+                [
+                  ...validScoreOptions.filter((option) => {
+                    if (currentTargetSetter === 'WE') {
+                      return (
+                        option.WE >= currentTarget &&
+                        !(option.WE === 165 && option.YOU === 0)
+                      );
+                    } else {
+                      return (
+                        option.YOU >= currentTarget &&
+                        !(option.WE === 0 && option.YOU === 165)
+                      );
+                    }
+                  }),
+                  currentTargetSetter === 'WE'
+                    ? { WE: 0, YOU: 165 }
+                    : { WE: 165, YOU: 0 },
+                  ,
+                ] as { WE: number; YOU: number }[]
+              )
+                .sort((a, b) => {
+                  if (currentTargetSetter === 'WE') return a.WE - b.WE;
+                  else return a.YOU - b.YOU;
                 })
-                .map((option, index) => (
+                .map((option, index, arr) => (
                   <button
                     key={index}
                     onClick={() => setNewRound(option)}
-                    className={`px-2 py-1 text-xs hover:bg-indigo-200 text-indigo-800 rounded-lg border transition-colors ${
-                      option.WE === newRound.WE
-                        ? 'border-indigo-800 bg-indigo-200'
-                        : 'border-indigo-200 bg-indigo-100'
-                    }`}
+                    className={`px-2 py-1 text-xs hover:bg-indigo-200 text-indigo-800 bg-indigo-100 rounded-lg border-2 transition-colors   ${
+                      index === 0 && '!bg-red-200 text-red-800'
+                    }
+
+                    ${
+                      index === arr.length - 2 &&
+                      '!bg-green-200 text-green-800 '
+                    }
+                     ${
+                       option.WE === newRound.WE
+                         ? index == 0
+                           ? 'border-red-800'
+                           : index === arr.length - 2
+                           ? 'border-green-800'
+                           : 'border-indigo-800 bg-indigo-200'
+                         : 'border-indigo-200 bg-indigo-100'
+                     }
+                  
+                    `}
                   >
                     ما: {option.WE.toLocaleString('fa')} <br />
                     شما: {option.YOU.toLocaleString('fa')}
@@ -259,7 +307,7 @@ export default function GameCounter() {
             </div>
           </div>
 
-          <div className='grid grid-cols-2 gap-3 mb-3'>
+          {/* <div className='grid grid-cols-2 gap-3 mb-3'>
             <div>
               <label className='block text-xs font-medium text-blue-500 mb-1'>
                 ما:
@@ -274,7 +322,7 @@ export default function GameCounter() {
                 type='number'
                 inputMode='numeric'
                 min={currentTarget && currentTargetSetter === 'WE' ? 0 : 5}
-                max='165'
+                max='330'
                 step='5'
                 value={newRound.WE}
                 onChange={(e) =>
@@ -297,7 +345,7 @@ export default function GameCounter() {
                 type='number'
                 inputMode='numeric'
                 min={currentTarget && currentTargetSetter === 'YOU' ? 0 : 5}
-                max='165'
+                max='330'
                 step='5'
                 value={newRound.YOU}
                 onChange={(e) =>
@@ -306,7 +354,7 @@ export default function GameCounter() {
                 className='w-full text-black  px-2 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
               />
             </div>
-          </div>
+          </div> */}
 
           {validationError && (
             <div className='mb-3 p-2 bg-red-100 border border-red-400 text-red-700 rounded text-xs'>
@@ -316,7 +364,10 @@ export default function GameCounter() {
 
           <button
             onClick={handleAddRound}
-            disabled={newRound.WE + newRound.YOU !== 165}
+            disabled={
+              newRound.WE + newRound.YOU !== 165 &&
+              newRound.WE + newRound.YOU !== 330
+            }
             className='w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded-xl transition-colors text-sm'
           >
             افزودن دست
@@ -335,46 +386,56 @@ export default function GameCounter() {
           </p>
         ) : (
           <div className='flex flex-col gap-2'>
-            {[...rounds].reverse().map((round, index, arr) => (
+            <div className='flex items-center justify-between gap-1 p-1 bg-white rounded-lg shadow-sm'>
+              <div className='flex items-center py-1 w-full'>
+                <div className='flex justify-between px-4 font-bold w-full'>
+                  <div className='flex items-center'>
+                    <span className='text-blue-600 '>مـا</span>
+                  </div>
+
+                  <div className='flex items-center'>
+                    <span className='text-red-600'>شما</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {rounds.map((round, index) => (
               <div
                 key={round.id}
                 className='flex items-center justify-between gap-1 p-1 bg-white rounded-lg shadow-sm'
               >
-                <div className='flex items-center space-x-3 space-x-reverse'>
-                  <span className='text-xs px-1 font-medium text-gray-600'>
-                    {(arr.length - index).toLocaleString('fa')}.
+                <div className='flex items-center py-1 w-full'>
+                  <span className='text-xs ps-1 font-medium text-gray-600'>
+                    {(index + 1).toLocaleString('fa')}.
                   </span>
-                  <div className='flex flex-col px-4'>
-                    <div className='text-xs text-gray-500 flex gap-2 items-center'>
-                      {round.target.toLocaleString('fa')}
-                      <span className='inline-flex items-center justify-center  rounded-full text-sm'>
-                        {round.suit}
+
+                  <div className='flex px-4 w-full relative'>
+                    <div className='flex items-center basis-0'>
+                      <span className='text-blue-600 '>
+                        {round.WE.toLocaleString('fa')}
                       </span>
-                      ({round.targetSetter === 'WE' ? 'ما' : 'شما'})
                     </div>
-                    <div className='flex gap-2'>
-                      <div className='flex items-center'>
-                        <span className='text-blue-600  text-xs'>ما:</span>
-                        <span className='text-blue-600  text-sm'>
-                          {round.WE.toLocaleString('fa')}
-                        </span>
-                      </div>
-                      <div className='flex items-center'>
-                        <span className='text-red-600 text-xs'>شما:</span>
-                        <span className='text-red-600 text-sm'>
-                          {round.YOU.toLocaleString('fa')}
-                        </span>
-                      </div>
+
+                    <div className='text-sm text-gray-500 flex gap-2 items-center absolute start-1/2 translate-x-[2rem] top-1/2 -translate-y-1/2'>
+                      <span>{round.suit}</span>
+                      <span>{round.target.toLocaleString('fa')}</span>
+                      <span>{round.targetSetter === 'WE' ? 'ما' : 'شما'}</span>
+                    </div>
+
+                    <div className='flex items-center  justify-end basis-full'>
+                      <span className='text-red-600'>
+                        {round.YOU.toLocaleString('fa')}
+                      </span>
                     </div>
                   </div>
                 </div>
-                <button
+                {/* <button
                   onClick={() => handleDeleteRound(round.id)}
                   className='text-red-500 hover:text-red-700 text-3xl cursor-pointer font-bold px-3'
                   disabled={gameEnded}
                 >
                   ×
-                </button>
+                </button> */}
               </div>
             ))}
           </div>
@@ -383,12 +444,37 @@ export default function GameCounter() {
 
       {/* Reset Button */}
       <div className='text-center my-3'>
-        <button
-          onClick={resetScores}
-          className='border border-red-400 cursor-pointer hover:bg-red-600 text-red-400 hover:text-white font-bold py-1 px-4 rounded-lg transition-colors text-sm'
-        >
-          شروع مجدد
-        </button>
+        {showConfirm ? (
+          <div className='flex flex-col gap-2'>
+            <span className='text-gray-600 text-sm font-bold'>
+              آیا مطمئنید؟
+            </span>
+            <div className='flex gap-2 items-center justify-center'>
+              <button
+                className='border w-1/2 border-red-400 cursor-pointer bg-red-600 text-white font-bold py-1 px-4 rounded-lg transition-colors text-sm'
+                onClick={() => {
+                  resetScores();
+                  setShowConfirm(false);
+                }}
+              >
+                بله
+              </button>
+              <button
+                className='border w-1/2 border-gray-400 cursor-pointer hover:bg-gray-600 text-gray-400 hover:text-white font-bold py-1 px-4 rounded-lg transition-colors text-sm'
+                onClick={() => setShowConfirm(false)}
+              >
+                خیر
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowConfirm(true)}
+            className='border border-red-400 cursor-pointer hover:bg-red-600 text-red-400 hover:text-white font-bold py-1 px-4 rounded-lg transition-colors text-sm'
+          >
+            شروع مجدد
+          </button>
+        )}
       </div>
     </div>
   );

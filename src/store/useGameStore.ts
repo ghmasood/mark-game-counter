@@ -77,11 +77,11 @@ export const useGameStore = create<ScoresState>()(
           };
         }
 
-        // Check if total round score equals MAX_ROUND_SCORE
-        if (we + you !== MAX_ROUND_SCORE) {
+        // Check if total round score equals MAX_ROUND_SCORE (165) or bonus case (330)
+        if (we + you !== MAX_ROUND_SCORE && we + you !== 330) {
           return {
             isValid: false,
-            error: `مجموع امتیاز دست باید ${MAX_ROUND_SCORE} باشد (فعلی: ${
+            error: `مجموع امتیاز دست باید ${MAX_ROUND_SCORE} یا ۳۳۰ باشد (فعلی: ${
               we + you
             })`,
           };
@@ -116,6 +116,30 @@ export const useGameStore = create<ScoresState>()(
           }
         }
 
+        // Check bonus rule: if target setter gets all points, they must get 330
+        const state2 = get();
+        if (state2.currentTargetSetter) {
+          if (
+            state2.currentTargetSetter === 'WE' &&
+            we === MAX_ROUND_SCORE &&
+            you === 0
+          ) {
+            return {
+              isValid: false,
+              error: `تیم ما نمی‌تواند ۱۶۵ امتیاز بگیرد، باید ۳۳۰ امتیاز بگیرد`,
+            };
+          } else if (
+            state2.currentTargetSetter === 'YOU' &&
+            you === MAX_ROUND_SCORE &&
+            we === 0
+          ) {
+            return {
+              isValid: false,
+              error: `تیم شما نمی‌تواند ۱۶۵ امتیاز بگیرد، باید ۳۳۰ امتیاز بگیرد`,
+            };
+          }
+        }
+
         return { isValid: true };
       },
 
@@ -143,8 +167,35 @@ export const useGameStore = create<ScoresState>()(
             }
           }
 
+          // Filter out 165-0 option when target setter gets all points (bonus rule)
+          if (state.currentTargetSetter) {
+            if (
+              state.currentTargetSetter === 'WE' &&
+              we === MAX_ROUND_SCORE &&
+              you === 0
+            ) {
+              continue; // Skip 165-0 for WE target setter
+            } else if (
+              state.currentTargetSetter === 'YOU' &&
+              you === MAX_ROUND_SCORE &&
+              we === 0
+            ) {
+              continue; // Skip 165-0 for YOU target setter
+            }
+          }
+
           options.push({ WE: we, YOU: you });
         }
+
+        // Add bonus 330-0 options for when target setter gets all points
+        if (state.currentTarget && state.currentTargetSetter) {
+          if (state.currentTargetSetter === 'WE') {
+            options.push({ WE: 330, YOU: 0 });
+          } else {
+            options.push({ WE: 0, YOU: 330 });
+          }
+        }
+
         return options;
       },
 
@@ -175,9 +226,23 @@ export const useGameStore = create<ScoresState>()(
             suit: state.currentSuit,
           };
 
+          // Apply bonus rule: if target setter gets all points (165), they get 330 bonus
+          let adjustedScores = { ...scores };
+          if (
+            state.currentTargetSetter === 'WE' &&
+            scores.WE === MAX_ROUND_SCORE
+          ) {
+            adjustedScores = { WE: 330, YOU: 0 };
+          } else if (
+            state.currentTargetSetter === 'YOU' &&
+            scores.YOU === MAX_ROUND_SCORE
+          ) {
+            adjustedScores = { WE: 0, YOU: 330 };
+          }
+
           const newTotal = {
-            WE: state.total.WE + scores.WE,
-            YOU: state.total.YOU + scores.YOU,
+            WE: state.total.WE + adjustedScores.WE,
+            YOU: state.total.YOU + adjustedScores.YOU,
           };
 
           // Check if game has ended
