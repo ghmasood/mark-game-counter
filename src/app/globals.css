@@ -24,6 +24,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-vazir), Arial, Helvetica, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* RTL Support */
@@ -42,4 +45,81 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-feature-settings: 'kern' 1;
   font-feature-settings: 'kern' 1;
+}
+
+/* Prevent Safari auto-zoom on input focus - Comprehensive solution */
+input,
+input[type='number'],
+input[type='text'],
+input[type='email'],
+input[type='tel'],
+input[type='password'],
+input[type='search'],
+input[type='url'],
+textarea,
+select {
+  font-size: 16px !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  transform: scale(1);
+  -webkit-transform: scale(1);
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  input,
+  input[type='number'],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='password'],
+  input[type='search'],
+  input[type='url'],
+  textarea,
+  select {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+  }
+}
+
+/* Additional Safari-specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  input,
+  input[type='number'],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='password'],
+  input[type='search'],
+  input[type='url'],
+  textarea,
+  select {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+  }
+}
+
+/* Prevent zoom on focus for iOS */
+@media screen and (max-width: 767px) {
+  input,
+  input[type='number'],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='password'],
+  input[type='search'],
+  input[type='url'],
+  textarea,
+  select {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+  }
 }

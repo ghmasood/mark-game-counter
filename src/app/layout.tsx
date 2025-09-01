@@ -23,6 +23,12 @@ const vazir = Vazirmatn({
 export const metadata: Metadata = {
   title: 'ثبت امتیاز - Mark Game Counter',
   description: 'اپلیکیشن ثبت امتیاز بازی با قابلیت ذخیره خودکار',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export default function RootLayout({
@@ -32,6 +38,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='fa' dir='rtl'>
+      <head>
+        <meta
+          name='viewport'
+          content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        />
+      </head>
       <body
         className={`${vazir.variable} ${geistSans.variable} ${geistMono.variable} antialiased font-vazir`}
       >
