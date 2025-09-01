@@ -21,7 +21,7 @@ const vazir = Vazirmatn({
 });
 
 export const metadata: Metadata = {
-  title: 'ثبت امتیاز - Mark Game Counter',
+  title: 'شمارنده بازی مارک مخصوص دزفولیا',
   description: 'اپلیکیشن ثبت امتیاز بازی با قابلیت ذخیره خودکار',
   viewport: {
     width: 'device-width',

@@ -77,7 +77,7 @@ export default function GameCounter() {
   const validScoreOptions = getValidScoreOptions();
 
   return (
-    <div className='-min-h-[calc(100dvh_-_5.5rem)] h-full bg-gray-50 p-4  max-w-md mx-auto rounded-2xl relative'>
+    <div className='min-h-[calc(100dvh_-_9rem)] bg-gray-50 p-4  max-w-md mx-auto rounded-2xl relative'>
       {/* Game Status */}
       {gameEnded && (
         <div className='mb-4 p-3 bg-yellow-100 border border-yellow-400 rounded-lg text-center'>
@@ -151,14 +151,16 @@ export default function GameCounter() {
           {/* Target Input */}
           <div className='mb-3'>
             <input
+              dir='ltr'
               type='number'
+              inputMode='numeric'
               min='85'
               max='165'
               step='5'
               value={targetInput}
               onChange={(e) => setTargetInput(e.target.value)}
               placeholder={`مثال: ${(120).toLocaleString('fa')}`}
-              className='w-full px-2 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-black'
+              className='w-full px-2 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-black'
             />
           </div>
 
@@ -173,9 +175,9 @@ export default function GameCounter() {
                 parseInt(targetInput) > 165 ||
                 parseInt(targetInput) % 5 !== 0
               }
-              className='bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white font-bold py-1 px-4 rounded transition-colors text-sm'
+              className='bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded-xl transition-colors text-sm'
             >
-              ما تعیین می‌کنیم
+              برای ما
             </button>
             <button
               onClick={() => handleSetTarget('YOU')}
@@ -186,9 +188,9 @@ export default function GameCounter() {
                 parseInt(targetInput) > 165 ||
                 parseInt(targetInput) % 5 !== 0
               }
-              className='bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white font-bold py-1 px-4 rounded transition-colors text-sm'
+              className='bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded-xl transition-colors text-sm'
             >
-              شما تعیین می‌کنید
+              برای شما
             </button>
           </div>
         </div>
@@ -231,12 +233,14 @@ export default function GameCounter() {
                   <button
                     key={index}
                     onClick={() => setNewRound(option)}
-                    className='px-2 py-1 text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 rounded border'
+                    className={`px-2 py-1 text-xs hover:bg-indigo-200 text-indigo-800 rounded-lg border transition-colors ${
+                      option.WE === newRound.WE
+                        ? 'border-indigo-800 bg-indigo-200'
+                        : 'border-indigo-200 bg-indigo-100'
+                    }`}
                   >
-                    ما:
-                    {option.WE} <br />
-                    شما:
-                    {option.YOU}
+                    ما: {option.WE.toLocaleString('fa')} <br />
+                    شما: {option.YOU.toLocaleString('fa')}
                   </button>
                 ))}
             </div>
@@ -248,7 +252,9 @@ export default function GameCounter() {
                 ما
               </label>
               <input
+                dir='ltr'
                 type='number'
+                inputMode='numeric'
                 min='0'
                 max='165'
                 step='5'
@@ -264,7 +270,9 @@ export default function GameCounter() {
                 شما
               </label>
               <input
+                dir='ltr'
                 type='number'
+                inputMode='numeric'
                 min='0'
                 max='165'
                 step='5'
@@ -286,7 +294,7 @@ export default function GameCounter() {
           <button
             onClick={handleAddRound}
             disabled={newRound.WE + newRound.YOU !== 165}
-            className='w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white font-bold py-1 px-4 rounded-lg transition-colors text-sm'
+            className='w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white font-bold py-2 px-4 rounded-xl transition-colors text-sm'
           >
             افزودن دست
           </button>
@@ -304,14 +312,14 @@ export default function GameCounter() {
           </p>
         ) : (
           <div className='flex flex-col gap-2'>
-            {[...rounds].reverse().map((round, index) => (
+            {[...rounds].reverse().map((round, index, arr) => (
               <div
                 key={round.id}
                 className='flex items-center justify-between gap-1 p-1 bg-white rounded-lg shadow-sm'
               >
                 <div className='flex items-center space-x-3 space-x-reverse'>
                   <span className='text-xs px-1 font-medium text-gray-600'>
-                    {index + 1}
+                    {(arr.length - index).toLocaleString('fa')}.
                   </span>
                   <div className='flex flex-col px-4'>
                     <div className='text-xs text-gray-500 flex gap-2 items-center'>
