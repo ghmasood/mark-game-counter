@@ -94,25 +94,27 @@ export default function GameCounter() {
       {/* Total Scores with Progress Bars */}
       <div className='grid grid-cols-2 gap-3 mb-3'>
         <div className='text-center p-4 bg-blue-50 rounded-lg'>
-          <h3 className='text-sm font-semibold text-blue-800 mb-1'>ما</h3>
+          <h3 className='text-sm font-semibold text-blue-600 mb-1'>ما</h3>
           <div className='text-3xl font-bold text-blue-600 mb-1'>
             {total.WE.toLocaleString('fa')}
+            <span className='text-sm px-1'>/{(1100).toLocaleString('fa')}</span>
           </div>
-          <div className='w-full bg-gray-200 rounded-full h-2 mb-1'>
+          <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden'>
             <div
-              className='bg-blue-600 h-2 rounded-full transition-all duration-300'
+              className='bg-blue-600 h-2  transition-all duration-300 '
               style={{ width: `${getProgressPercentage(total.WE)}%` }}
             ></div>
           </div>
         </div>
         <div className='text-center p-4 bg-red-50 rounded-lg'>
-          <h3 className='text-sm font-semibold text-red-800 mb-1'>شما</h3>
+          <h3 className='text-sm font-semibold text-red-600 mb-1'>شما</h3>
           <div className='text-3xl font-bold text-red-600 mb-1'>
             {total.YOU.toLocaleString('fa')}
+            <span className='text-sm px-1'>/{(1100).toLocaleString('fa')}</span>
           </div>
-          <div className='w-full bg-gray-200 rounded-full h-2 mb-1'>
+          <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden'>
             <div
-              className='bg-red-600 h-2 rounded-full transition-all duration-300'
+              className='bg-red-600 h-2 transition-all duration-300 '
               style={{ width: `${getProgressPercentage(total.YOU)}%` }}
             ></div>
           </div>
@@ -124,9 +126,6 @@ export default function GameCounter() {
         <div className='bg-white p-3 rounded-lg mb-2 shadow-sm'>
           {/* Suit Selection */}
           <div className='mb-2'>
-            <label className='block text-xs font-medium text-gray-700 mb-2'>
-              انتخاب خال:
-            </label>
             <div className='grid grid-cols-4 gap-2'>
               {suits.map((suit) => (
                 <button
@@ -151,9 +150,6 @@ export default function GameCounter() {
 
           {/* Target Input */}
           <div className='mb-3'>
-            <label className='block text-xs font-medium text-gray-700 mb-1'>
-              هدف:
-            </label>
             <input
               type='number'
               min='85'
@@ -162,7 +158,7 @@ export default function GameCounter() {
               value={targetInput}
               onChange={(e) => setTargetInput(e.target.value)}
               placeholder={`مثال: ${(120).toLocaleString('fa')}`}
-              className='w-full px-2 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-black'
+              className='w-full px-2 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-black'
             />
           </div>
 
@@ -222,7 +218,7 @@ export default function GameCounter() {
           {/* Quick Score Options */}
           <div className='mb-3'>
             <p className='text-xs text-gray-600 mb-2'>انتخاب سریع:</p>
-            <div className='grid grid-cols-3 gap-1'>
+            <div className='grid grid-cols-3 gap-2'>
               {validScoreOptions
                 .filter((option) => {
                   if (currentTargetSetter === 'WE') {
@@ -235,10 +231,11 @@ export default function GameCounter() {
                   <button
                     key={index}
                     onClick={() => setNewRound(option)}
-                    className='px-2 py-1 text-xs bg-violet-100 hover:bg-violet-200 text-violet-800 rounded border'
+                    className='px-2 py-1 text-xs bg-amber-100 hover:bg-amber-200 text-amber-800 rounded border'
                   >
                     ما:
-                    {option.WE} شما:
+                    {option.WE} <br />
+                    شما:
                     {option.YOU}
                   </button>
                 ))}
@@ -259,7 +256,7 @@ export default function GameCounter() {
                 onChange={(e) =>
                   handleScoreChange('WE', parseInt(e.target.value) || 0)
                 }
-                className='w-full text-black px-2 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
+                className='w-full text-black px-2 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
               />
             </div>
             <div>
@@ -275,7 +272,7 @@ export default function GameCounter() {
                 onChange={(e) =>
                   handleScoreChange('YOU', parseInt(e.target.value) || 0)
                 }
-                className='w-full text-black px-2 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
+                className='w-full text-black px-2 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
               />
             </div>
           </div>
@@ -289,7 +286,7 @@ export default function GameCounter() {
           <button
             onClick={handleAddRound}
             disabled={newRound.WE + newRound.YOU !== 165}
-            className='w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white font-bold py-3 px-4 rounded transition-colors text-sm'
+            className='w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white font-bold py-1 px-4 rounded-lg transition-colors text-sm'
           >
             افزودن دست
           </button>
@@ -298,7 +295,7 @@ export default function GameCounter() {
 
       {/* Rounds History */}
       <div className='mb-1'>
-        <h3 className='text-xs font-semibold mb-1 text-black'>
+        <h3 className='text-xs font-semibold mb-1 text-gray-600'>
           تاریخچه دست‌ها
         </h3>
         {rounds.length === 0 ? (
@@ -357,7 +354,7 @@ export default function GameCounter() {
       <div className='text-center my-3'>
         <button
           onClick={resetScores}
-          className='border border-red-400 cursor-pointer hover:bg-red-600 text-red-400 hover:text-white font-bold py-1 px-4 rounded transition-colors text-sm'
+          className='border border-red-400 cursor-pointer hover:bg-red-600 text-red-400 hover:text-white font-bold py-1 px-4 rounded-lg transition-colors text-sm'
         >
           شروع مجدد
         </button>
