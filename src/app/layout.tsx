@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Vazirmatn } from 'next/font/google';
 import './globals.css';
+import Link from 'next/link';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -47,7 +48,27 @@ export default function RootLayout({
       <body
         className={`${vazir.variable} ${geistSans.variable} ${geistMono.variable} antialiased font-vazir`}
       >
-        {children}
+        <div
+          style={{
+            backgroundImage: 'url(/dez-bridge.jpg)',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div className='backdrop-blur-md p-4 bg-black/50'>
+            <h1 className='text-3xl drop-shadow-md font-extrabold text-center mb-5'>
+              شمارنده بازی مارک
+            </h1>
+            <div className='container mx-auto px-4'>{children}</div>
+            <p className='drop-shadow-md text-white my-5 text-center text-xs'>
+              ساخته شده با عشق توسط مسعود برای بروبچون دسفیل -{' '}
+              <Link className='underline' href={'/rules'}>
+                قوانین و مقررات
+              </Link>
+            </p>
+          </div>
+        </div>
       </body>
     </html>
   );
