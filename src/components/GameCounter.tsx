@@ -93,13 +93,6 @@ export default function GameCounter() {
     }
   };
 
-  const getProgressPercentage = (score: number) => {
-    // Calculate max possible score based on rounds played
-    const maxPossibleScore = rounds.length * 330; // Worst case: all rounds are 330-0
-    const targetScore = Math.max(1100, maxPossibleScore);
-    return Math.min((score / targetScore) * 100, 100);
-  };
-
   const validScoreOptions = getValidScoreOptions();
 
   return (
@@ -123,14 +116,12 @@ export default function GameCounter() {
           <h3 className='text-sm font-semibold text-blue-600 mb-1'>ما</h3>
           <div className='text-3xl font-bold text-blue-600 mb-1'>
             {total.WE.toLocaleString('fa')}
-            <span className='text-sm px-1'>
-              /{Math.max(1100, rounds.length * 330).toLocaleString('fa')}
-            </span>
+            <span className='text-sm px-1'>/{(1100).toLocaleString('fa')}</span>
           </div>
           <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden'>
             <div
-              className='bg-blue-600 h-2  transition-all duration-300 '
-              style={{ width: `${getProgressPercentage(total.WE)}%` }}
+              className='bg-blue-600 h-2  transition-all duration-300 animate-pulse'
+              style={{ width: `${(100 * total.WE) / 1100}%` }}
             ></div>
           </div>
         </div>
@@ -138,14 +129,12 @@ export default function GameCounter() {
           <h3 className='text-sm font-semibold text-red-600 mb-1'>شما</h3>
           <div className='text-3xl font-bold text-red-600 mb-1'>
             {total.YOU.toLocaleString('fa')}
-            <span className='text-sm px-1'>
-              /{Math.max(1100, rounds.length * 330).toLocaleString('fa')}
-            </span>
+            <span className='text-sm px-1'>/{(1100).toLocaleString('fa')}</span>
           </div>
           <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden'>
             <div
-              className='bg-red-600 h-2 transition-all duration-300 '
-              style={{ width: `${getProgressPercentage(total.YOU)}%` }}
+              className='bg-red-600 h-2 transition-all duration-300 animate-pulse'
+              style={{ width: `${(100 * total.YOU) / 1100}%` }}
             ></div>
           </div>
         </div>
