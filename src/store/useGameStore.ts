@@ -92,13 +92,57 @@ export const useGameStore = create<ScoresState>()(
           return { isValid: false, error: 'امتیازات نمی‌توانند منفی باشند' };
         }
 
+        // Check if target setter's score meets their target
+        const state = get();
+        if (state.currentTarget && state.currentTargetSetter) {
+          if (
+            state.currentTargetSetter === 'WE' &&
+            we > 0 &&
+            we < state.currentTarget
+          ) {
+            return {
+              isValid: false,
+              error: `تیم ما نمی‌تواند کمتر از هدف خود (${state.currentTarget}) امتیاز بگیرد`,
+            };
+          } else if (
+            state.currentTargetSetter === 'YOU' &&
+            you > 0 &&
+            you < state.currentTarget
+          ) {
+            return {
+              isValid: false,
+              error: `تیم شما نمی‌تواند کمتر از هدف خود (${state.currentTarget}) امتیاز بگیرد`,
+            };
+          }
+        }
+
         return { isValid: true };
       },
 
       getValidScoreOptions: () => {
         const options: Array<{ WE: number; YOU: number }> = [];
+        const state = get();
+
         for (let we = 0; we <= MAX_ROUND_SCORE; we += SCORE_STEP) {
           const you = MAX_ROUND_SCORE - we;
+
+          // Filter out options where target setter scores below their target
+          if (state.currentTarget && state.currentTargetSetter) {
+            if (
+              state.currentTargetSetter === 'WE' &&
+              we > 0 &&
+              we < state.currentTarget
+            ) {
+              continue; // Skip this option
+            } else if (
+              state.currentTargetSetter === 'YOU' &&
+              you > 0 &&
+              you < state.currentTarget
+            ) {
+              continue; // Skip this option
+            }
+          }
+
           options.push({ WE: we, YOU: you });
         }
         return options;
@@ -166,8 +210,6 @@ export const useGameStore = create<ScoresState>()(
           const rounds = state.rounds.map((r) => {
             if (r.id === id) {
               const newRound = { ...r, [team]: score };
-              const otherTeam = team === 'WE' ? 'YOU' : 'WE';
-              const otherScore = r[otherTeam];
 
               // Validate the updated round
               const validation = get().validateRoundScore(

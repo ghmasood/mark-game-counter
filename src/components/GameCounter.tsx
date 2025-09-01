@@ -62,6 +62,19 @@ export default function GameCounter() {
     const otherTeam = team === 'WE' ? 'YOU' : 'WE';
     const newScores = { ...newRound, [team]: value, [otherTeam]: 165 - value };
 
+    // Check if target setter is trying to score below their target
+    if (currentTarget && currentTargetSetter) {
+      if (currentTargetSetter === team && value > 0 && value < currentTarget) {
+        setValidationError(
+          `تیم ${
+            currentTargetSetter === 'WE' ? 'ما' : 'شما'
+          } نمی‌تواند کمتر از هدف خود (${currentTarget}) امتیاز بگیرد`
+        );
+        setNewRound(newScores);
+        return;
+      }
+    }
+
     setNewRound(newScores);
 
     // Clear validation error when user is typing
@@ -249,38 +262,48 @@ export default function GameCounter() {
           <div className='grid grid-cols-2 gap-3 mb-3'>
             <div>
               <label className='block text-xs font-medium text-blue-500 mb-1'>
-                ما
+                ما:
+                {currentTarget && currentTargetSetter === 'WE' && (
+                  <span className='text-xs text-gray-500 ml-1'>
+                    (۰ یا حداقل: {currentTarget.toLocaleString('fa')})
+                  </span>
+                )}
               </label>
               <input
                 dir='ltr'
                 type='number'
                 inputMode='numeric'
-                min='0'
+                min={currentTarget && currentTargetSetter === 'WE' ? 0 : 5}
                 max='165'
                 step='5'
                 value={newRound.WE}
                 onChange={(e) =>
                   handleScoreChange('WE', parseInt(e.target.value) || 0)
                 }
-                className='w-full text-black px-2 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
+                className='w-full text-black  px-2 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
               />
             </div>
             <div>
               <label className='block text-xs font-medium text-red-500 mb-1'>
-                شما
+                شما:
+                {currentTarget && currentTargetSetter === 'YOU' && (
+                  <span className='text-xs text-gray-500 ml-1'>
+                    (۰ یا حداقل: {currentTarget.toLocaleString('fa')})
+                  </span>
+                )}
               </label>
               <input
                 dir='ltr'
                 type='number'
                 inputMode='numeric'
-                min='0'
+                min={currentTarget && currentTargetSetter === 'YOU' ? 0 : 5}
                 max='165'
                 step='5'
                 value={newRound.YOU}
                 onChange={(e) =>
                   handleScoreChange('YOU', parseInt(e.target.value) || 0)
                 }
-                className='w-full text-black px-2 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
+                className='w-full text-black  px-2 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-center'
               />
             </div>
           </div>
