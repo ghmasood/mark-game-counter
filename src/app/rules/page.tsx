@@ -10,6 +10,9 @@ function Page() {
           ولی تیمی که متوجه تقلب شده است می تواند به بازی ادامه دهد و تیم متقلب
           را شلم کند.
         </li>
+        <li>
+          اگر تیم حریف رو دست پخش کننده بولی نزنه بعد از دیدن دست و قبل از خوندن امکان اینکه تیم حریف بگه مجدد دست بدین هستش
+        </li>
       </ol>
       <Link href='/' className='mt-auto w-full'>
         <button className='rounded-xl py-1 cursor-pointer hover:bg-indigo-600 transition-colors w-full bg-indigo-500 text-white'>
