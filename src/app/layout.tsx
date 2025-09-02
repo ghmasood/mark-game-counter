@@ -40,6 +40,7 @@ export const metadata: Metadata = {
     startupImage: [
       {
         url: 'dez-bridge.jpg',
+        media: 'all',
       },
     ],
   },
@@ -63,6 +64,7 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION,
   },
+  other: { 'apple-mobile-web-app-capable': 'yes' }, // add this line
   viewport: {
     width: 'device-width',
     initialScale: 1,
@@ -86,6 +88,11 @@ export default function RootLayout({
         <meta
           name='viewport'
           content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        />
+        <link
+          rel='apple-touch-startup-image'
+          href='dez-bridge.jpg'
+          media='all'
         />
       </head>
       <body
