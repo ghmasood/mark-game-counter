@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     title: APP_DEFAULT_TITLE,
     startupImage: [
       {
-        url: '/dez-bridge.jpg',
+        url: 'dez-bridge.jpg',
       },
     ],
   },
