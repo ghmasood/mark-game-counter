@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Vazirmatn } from 'next/font/google';
 import './globals.css';
@@ -21,15 +21,54 @@ const vazir = Vazirmatn({
   display: 'swap',
 });
 
+const APP_NAME = 'Mark Counter';
+const APP_DEFAULT_TITLE = 'شمارنده بازی مارک مخصوص دزفولیا';
+const APP_TITLE_TEMPLATE = '%s - PWA App';
+const APP_DESCRIPTION = 'اپلیکیشن ثبت امتیاز بازی با قابلیت ذخیره خودکار';
+
 export const metadata: Metadata = {
-  title: 'شمارنده بازی مارک مخصوص دزفولیا',
-  description: 'اپلیکیشن ثبت امتیاز بازی با قابلیت ذخیره خودکار',
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE,
+  },
+  description: APP_DESCRIPTION,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: APP_DEFAULT_TITLE,
+    // startUpImage: [],
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary',
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
   viewport: {
     width: 'device-width',
     initialScale: 1,
     maximumScale: 1,
     userScalable: false,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#FFFFFF',
 };
 
 export default function RootLayout({
