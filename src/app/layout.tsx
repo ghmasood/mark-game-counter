@@ -37,7 +37,11 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: 'default',
     title: APP_DEFAULT_TITLE,
-    // startUpImage: [],
+    startupImage: [
+      {
+        url: '/dez-bridge.jpg',
+      },
+    ],
   },
   formatDetection: {
     telephone: false,
