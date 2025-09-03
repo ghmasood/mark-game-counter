@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Vazirmatn } from 'next/font/google';
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
+
 import Link from 'next/link';
 
 const geistSans = Geist({
@@ -87,6 +89,7 @@ export default function RootLayout({
       <body
         className={`${vazir.variable} ${geistSans.variable} ${geistMono.variable} antialiased font-vazir`}
       >
+        <Analytics />
         <div
           style={{
             backgroundImage: 'url(/dez-bridge.jpg)',
