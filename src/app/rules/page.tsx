@@ -3,10 +3,10 @@ import React from 'react';
 
 function Page() {
   return (
-    <div className='min-h-[calc(100dvh_-_9rem)] bg-gray-50 p-4 max-w-md mx-auto rounded-2xl relative flex flex-col'>
+    <div className='fade-in min-h-[calc(100dvh_-_9rem)] bg-gray-50 p-4 max-w-md mx-auto rounded-2xl relative flex flex-col'>
       <ol className='text-gray-600 list-[upper-roman] flex flex-col gap-3 px-4'>
         <li className='text-justify'>
-          اگر یک تیم تقلب کرد و تیم مقابل متوجه شد 165 به ضرر تیم متقلب است ،
+          اگر یک تیم تقلب کرد و تیم مقابل متوجه شد ۱۶۵ به ضرر تیم متقلب است ،
           ولی تیمی که متوجه تقلب شده است می تواند به بازی ادامه دهد و تیم متقلب
           را شلم کند.
         </li>

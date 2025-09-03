@@ -123,3 +123,30 @@ select {
     -webkit-transform: scale(1);
   }
 }
+
+@keyframes fadein {
+  0% {
+    transform: translateX(4000px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* optional helper class */
+.fade-in {
+  animation: fadein 0.75s ease-out forwards;
+}
+
+@keyframes blurIn {
+  0% {
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    backdrop-filter: blur(10px);
+  }
+}
+
+.blur-in {
+  animation: blurIn 2s ease-in forwards;
+}

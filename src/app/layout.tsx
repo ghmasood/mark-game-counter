@@ -37,12 +37,7 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: 'default',
     title: APP_DEFAULT_TITLE,
-    startupImage: [
-      {
-        url: 'dez-bridge.jpg',
-        media: 'all',
-      },
-    ],
+    // startupImage: [],
   },
   formatDetection: {
     telephone: false,
@@ -64,7 +59,6 @@ export const metadata: Metadata = {
     },
     description: APP_DESCRIPTION,
   },
-  other: { 'apple-mobile-web-app-capable': 'yes' }, // add this line
   viewport: {
     width: 'device-width',
     initialScale: 1,
@@ -89,11 +83,6 @@ export default function RootLayout({
           name='viewport'
           content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
         />
-        <link
-          rel='apple-touch-startup-image'
-          href='dez-bridge.jpg'
-          media='all'
-        />
       </head>
       <body
         className={`${vazir.variable} ${geistSans.variable} ${geistMono.variable} antialiased font-vazir`}
@@ -106,7 +95,7 @@ export default function RootLayout({
             backgroundPosition: 'center',
           }}
         >
-          <div className='backdrop-blur-md p-4 bg-black/50'>
+          <div className='blur-in p-4 bg-black/50'>
             <h1 className='text-3xl drop-shadow-md font-extrabold text-center mb-5'>
               شمارنده بازی مارک
             </h1>

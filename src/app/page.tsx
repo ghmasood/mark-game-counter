@@ -1,7 +1,8 @@
 'use client';
 
-import GameCounter from '@/components/GameCounter';
+import dynamic from 'next/dynamic';
 
+const CounterLazy = dynamic(() => import('@/components/GameCounter'));
 export default function Home() {
-  return <GameCounter />;
+  return <CounterLazy />;
 }

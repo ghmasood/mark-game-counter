@@ -96,7 +96,7 @@ export default function GameCounter() {
   const validScoreOptions = getValidScoreOptions();
 
   return (
-    <div className='min-h-[calc(100dvh_-_9rem)] bg-gray-50 p-4  max-w-md mx-auto rounded-2xl relative'>
+    <div className='fade-in min-h-[calc(100dvh_-_9rem)] bg-gray-50 p-4  max-w-md mx-auto rounded-2xl relative'>
       {/* Game Status */}
       {gameEnded && (
         <div className='mb-4 p-3 bg-yellow-100 border border-yellow-400 rounded-lg text-center'>
