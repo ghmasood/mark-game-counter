@@ -25,11 +25,13 @@ interface ScoresState {
   currentTarget: number | null; // هدف فعلی برای دست جدید
   currentTargetSetter: Team | null; // تیمی که هدف فعلی را تعیین کرده
   currentSuit: Suit | null; // خال فعلی برای دست جدید
+  labels: { we: string; you: string };
   addRound: (scores: { WE: number; YOU: number }) => void;
   updateRound: (id: string, team: Team, score: number) => void;
   deleteRound: (id: string) => void;
   resetScores: () => void;
   setTarget: (target: number, team: Team, suit: Suit) => void;
+  setLabels: (labels: { we: string; you: string }) => void;
   validateRoundScore: (
     we: number,
     you: number
@@ -53,6 +55,7 @@ export const useGameStore = create<ScoresState>()(
       currentTarget: null,
       currentTargetSetter: null,
       currentSuit: null,
+      labels: { we: 'ما', you: 'شما' }, // default labels
 
       setTarget: (target: number, team: Team, suit: Suit) => {
         if (
@@ -67,6 +70,8 @@ export const useGameStore = create<ScoresState>()(
           });
         }
       },
+
+      setLabels: (labels) => set({ labels }),
 
       validateRoundScore: (we: number, you: number) => {
         // Check if scores are multiples of 5
@@ -369,6 +374,7 @@ export const useGameStore = create<ScoresState>()(
         currentTarget: state.currentTarget,
         currentTargetSetter: state.currentTargetSetter,
         currentSuit: state.currentSuit,
+        labels: state.labels, // <-- persist labels
       }),
     }
   )

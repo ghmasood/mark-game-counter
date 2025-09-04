@@ -14,10 +14,14 @@ function Page() {
           اگر تیم حریف رو دست پخش کننده بولی نزنه بعد از دیدن دست و قبل از خوندن
           امکان اینکه تیم حریف بگه مجدد دست بدین هستش
         </li>
+        <li className='text-justify'>
+          بیان جملات و کلماتی مانند کمی پاس، پاس کچکه، مری تکی نداری و امثالهم
+          ممنوع می‌باشد و در صورت ارتکاب ۱۶۵ به امتیازات حریف اضافه می‌شود
+        </li>
       </ol>
       <Link href='/' className='mt-auto w-full'>
         <button className='rounded-xl py-1 cursor-pointer hover:bg-indigo-600 transition-colors w-full bg-indigo-500 text-white'>
-          بازگشت به بازی
+          بازگشت به شمارنده
         </button>
       </Link>
     </div>

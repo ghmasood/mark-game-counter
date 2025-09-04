@@ -5,6 +5,7 @@ import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
 
 import Link from 'next/link';
+import { Setting2 } from 'iconsax-reactjs';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
