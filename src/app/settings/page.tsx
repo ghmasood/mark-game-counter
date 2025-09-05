@@ -43,7 +43,12 @@ function Page() {
       </div>
       <Link href='/' className='mt-auto w-full'>
         <button
-          onClick={() => setLabels({ we: weLabel, you: youLabel })}
+          onClick={() =>
+            setLabels({
+              we: weLabel ? weLabel : 'ما',
+              you: youLabel ? youLabel : 'شما',
+            })
+          }
           className='rounded-xl py-1 cursor-pointer hover:bg-indigo-600 transition-colors w-full bg-indigo-500 text-white'
         >
           ذخیره و بازگشت به شمارنده

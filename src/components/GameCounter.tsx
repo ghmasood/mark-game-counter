@@ -12,6 +12,9 @@ import {
   DrawerTitle,
 } from './UI';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+const DateTimeLazy = dynamic(() => import('@/components/UI/date-time'));
 
 export default function GameCounter() {
   const {
@@ -116,6 +119,8 @@ export default function GameCounter() {
             size='1.75rem'
             className='text-gray-800 hover:rotate-180 active:rotate-180 transition-transform cursor-pointer duration-1000'
           />
+
+          <DateTimeLazy className='ms-auto' />
         </div>
         {/* Game Status */}
         {gameEnded && (
@@ -134,21 +139,19 @@ export default function GameCounter() {
 
         {/* Total Scores with Progress Bars */}
         <div className='grid grid-cols-2 gap-3 mb-3'>
-          <div className='text-center p-4 bg-blue-50 rounded-lg'>
-            <h3 className='text-sm font-semibold text-blue-600 mb-1'>
-              {labels.we} (ما)
-            </h3>
-            <div className='text-3xl font-bold text-blue-600 mb-1'>
+          <div className='text-center p-4 bg-blue-50 rounded-lg text-blue-600 '>
+            <h3 className='text-sm font-semibold  mb-1'>{labels.we} (ما)</h3>
+            <div className='text-3xl font-bold mb-1'>
               {total.WE.toLocaleString('fa')}
               <span className='text-sm px-1'>
                 /{(1100).toLocaleString('fa')}
               </span>
             </div>
-            <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden'>
+            <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden relative'>
               <div
-                className='bg-blue-600 h-2  transition-all duration-300 animate-pulse'
+                className='bg-blue-600 h-2 transition-all duration-300 absolute end-0'
                 style={{ width: `${(100 * total.WE) / 1100}%` }}
-              ></div>
+              />
             </div>
           </div>
           <div className='text-center p-4 bg-red-50 rounded-lg'>
@@ -161,9 +164,9 @@ export default function GameCounter() {
                 /{(1100).toLocaleString('fa')}
               </span>
             </div>
-            <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden'>
+            <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden relative'>
               <div
-                className='bg-red-600 h-2 transition-all duration-300 animate-pulse'
+                className='bg-red-600 h-2 transition-all duration-300 absolute end-0'
                 style={{ width: `${(100 * total.YOU) / 1100}%` }}
               ></div>
             </div>
@@ -247,8 +250,8 @@ export default function GameCounter() {
 
         {/* Current Target Display */}
         {!gameEnded && currentTarget && currentSuit && (
-          <div className='bg-gradient-to-r from-green-50 to-emerald-50 p-2 rounded-lg mb-4 text-center border border-green-200 shadow-sm'>
-            <div className='flex items-center justify-center space-x-2 space-x-reverse mb-2'>
+          <div className='bg-gradient-to-r from-green-50 to-emerald-50 p-2 rounded-lg mb-3 text-center border border-emerald-300 shadow-sm'>
+            <div className='flex items-center justify-center'>
               <span className='text-lg font-bold text-green-800'>
                 هدف: {currentTarget.toLocaleString('fa')}
               </span>
@@ -256,12 +259,13 @@ export default function GameCounter() {
                 {currentSuit}
               </span>
             </div>
-            <p className='text-sm text-green-700'>
+
+            <div className='text-sm text-green-700'>
               برای تیم{' '}
               <span className='font-bold'>
                 {currentTargetSetter === 'WE' ? labels.we : labels.you}
               </span>
-            </p>
+            </div>
           </div>
         )}
 
@@ -397,7 +401,7 @@ export default function GameCounter() {
         )}
 
         {/* Rounds History */}
-        <div className='mb-1'>
+        <div className='mt-3'>
           <h3 className='text-xs font-semibold mb-1 text-gray-600'>
             تاریخچه دست‌ها
           </h3>
@@ -406,7 +410,7 @@ export default function GameCounter() {
               هنوز دستی اضافه نشده
             </p>
           ) : (
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
               <div className='flex items-center justify-between gap-1 p-1 bg-white rounded-lg shadow-sm'>
                 <div className='flex items-center py-1 w-full'>
                   <div className='flex justify-between px-4 font-bold w-full'>
@@ -430,23 +434,23 @@ export default function GameCounter() {
                       {(index + 1).toLocaleString('fa')}.
                     </span>
 
-                    <div className='flex px-4 w-full relative'>
-                      <div className='flex items-center basis-0'>
+                    <div className='flex px-2 justify-between w-full'>
+                      <div className='flex items-center justify-center w-8'>
                         <span className='text-blue-600 '>
                           {round.WE.toLocaleString('fa')}
                         </span>
                       </div>
 
-                      <div className='text-sm text-gray-500 flex gap-2 items-center absolute start-1/2 translate-x-[2rem] top-1/2 -translate-y-1/2'>
+                      <div className='text-sm text-gray-500 flex gap-1 items-center w-[7rem] justify-between '>
                         <span>{round.suit}</span>
                         <span>{round.target.toLocaleString('fa')}</span>
-                        <span>
+                        <span className='truncate'>
                           {round.targetSetter === 'WE' ? labels.we : labels.you}
                         </span>
                       </div>
 
-                      <div className='flex items-center  justify-end basis-full'>
-                        <span className='text-red-600'>
+                      <div className='flex justify-center w-8'>
+                        <span className='text-red-600 '>
                           {round.YOU.toLocaleString('fa')}
                         </span>
                       </div>
@@ -468,7 +472,7 @@ export default function GameCounter() {
 
       {/* Reset Button */}
       <Drawer open={showDrawer} onOpenChange={setShowDrawer}>
-        <DrawerContent className='bg-white text-gray-600'>
+        <DrawerContent className='bg-white text-gray-600 pb-4'>
           <DrawerHeader>
             <DrawerTitle className='text-gray-600 font-bold'>
               آیا مطمئنید می‌خواهید بازی را ریست کنید؟
