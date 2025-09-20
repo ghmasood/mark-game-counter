@@ -30,6 +30,7 @@ interface ScoresState {
   updateRound: (id: string, team: Team, score: number) => void;
   deleteRound: (id: string) => void;
   resetScores: () => void;
+  deleteLocalRound: () => void;
   setTarget: (target: number, team: Team, suit: Suit) => void;
   setLabels: (labels: { we: string; you: string }) => void;
   validateRoundScore: (
@@ -358,6 +359,13 @@ export const useGameStore = create<ScoresState>()(
           total: { WE: 0, YOU: 0 },
           gameEnded: false,
           winner: null,
+          currentTarget: null,
+          currentTargetSetter: null,
+          currentSuit: null,
+        }),
+
+      deleteLocalRound: () =>
+        set({
           currentTarget: null,
           currentTargetSetter: null,
           currentSuit: null,

@@ -2,7 +2,7 @@
 
 import { suits } from '@/const';
 import { useGameStore } from '@/store/useGameStore';
-import { RefreshCircle, Setting2 } from 'iconsax-reactjs';
+import { CloseCircle, RefreshCircle, Setting2 } from 'iconsax-reactjs';
 import { useState } from 'react';
 import {
   Drawer,
@@ -27,6 +27,7 @@ export default function GameCounter() {
     currentSuit,
     addRound,
     deleteRound,
+    deleteLocalRound,
     setTarget,
     resetScores,
     validateRoundScore,
@@ -250,7 +251,13 @@ export default function GameCounter() {
 
         {/* Current Target Display */}
         {!gameEnded && currentTarget && currentSuit && (
-          <div className='bg-gradient-to-r from-green-50 to-emerald-50 p-2 rounded-lg mb-3 text-center border border-emerald-300 shadow-sm'>
+          <div className='bg-gradient-to-r from-green-50 to-emerald-50 p-2 rounded-lg mb-3 text-center border border-emerald-300 shadow-sm relative'>
+            <div
+              className='absolute text-red-400 end-1 top-1 hover:text-red-600 transition-all hover:scale-110 duration-500 cursor-pointer'
+              onClick={() => deleteLocalRound()}
+            >
+              <CloseCircle size='1rem' variant='Bold' />
+            </div>
             <div className='flex items-center justify-center'>
               <span className='text-lg font-bold text-green-800'>
                 هدف: {currentTarget.toLocaleString('fa')}
