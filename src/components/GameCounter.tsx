@@ -2,7 +2,12 @@
 
 import { suits } from '@/const';
 import { useGameStore } from '@/store/useGameStore';
-import { CloseCircle, RefreshCircle, Setting2 } from 'iconsax-reactjs';
+import {
+  CloseCircle,
+  Convertshape2,
+  RefreshCircle,
+  Setting2,
+} from 'iconsax-reactjs';
 import { useState } from 'react';
 import {
   Drawer,
@@ -42,7 +47,7 @@ export default function GameCounter() {
   const [selectedSuit, setSelectedSuit] = useState<
     '♠️' | '♥️' | '♦️' | '♣️' | null
   >(null);
-
+  const [isShowRemain, setIsShowRemain] = useState(false);
   const handleAddRound = () => {
     const validation = validateRoundScore(newRound.WE, newRound.YOU);
     if (validation.isValid) {
@@ -111,14 +116,22 @@ export default function GameCounter() {
             <Setting2
               variant='Bulk'
               size='1.75rem'
-              className='text-gray-800 hover:rotate-180 transition-transform cursor-pointer duration-1000'
+              className='text-gray-800 transition-transform cursor-pointer duration-1000'
             />
           </Link>
           <RefreshCircle
             onClick={() => setShowDrawer(true)}
             variant='Bulk'
             size='1.75rem'
-            className='text-gray-800 hover:rotate-180 active:rotate-180 transition-transform cursor-pointer duration-1000'
+            className='text-gray-800 active:rotate-180 transition-transform cursor-pointer duration-1000'
+          />
+          <Convertshape2
+            onClick={() => setIsShowRemain((prev) => !prev)}
+            variant={isShowRemain ? 'Bold' : 'Outline'}
+            size='1.5rem'
+            className={` active:rotate-180 transition-transform cursor-pointer text-gray-800 duration-1000 ${
+              isShowRemain ? 'rotate-90 ' : ''
+            }`}
           />
 
           <DateTimeLazy className='ms-auto' />
@@ -142,12 +155,20 @@ export default function GameCounter() {
         <div className='grid grid-cols-2 gap-3 mb-3'>
           <div className='text-center p-4 bg-blue-50 rounded-lg text-blue-600 '>
             <h3 className='text-sm font-semibold  mb-1'>{labels.we} (ما)</h3>
-            <div className='text-3xl font-bold mb-1'>
-              {total.WE.toLocaleString('fa')}
-              <span className='text-sm px-1'>
-                /{(1100).toLocaleString('fa')}
-              </span>
-            </div>
+            {isShowRemain ? (
+              <div className='text-2xl font-bold h-9 mb-1'>{`${Math.floor(
+                total.WE / 165
+              ).toLocaleString('fa')} دست و  ${(total.WE % 165).toLocaleString(
+                'fa'
+              )}`}</div>
+            ) : (
+              <div className='text-3xl font-bold mb-1'>
+                {total.WE.toLocaleString('fa')}
+                <span className='text-sm px-1'>
+                  /{(1100).toLocaleString('fa')}
+                </span>
+              </div>
+            )}
             <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden relative'>
               <div
                 className='bg-blue-600 h-2 transition-all duration-300 absolute end-0'
@@ -155,21 +176,27 @@ export default function GameCounter() {
               />
             </div>
           </div>
-          <div className='text-center p-4 bg-red-50 rounded-lg'>
-            <h3 className='text-sm font-semibold text-red-600 mb-1'>
-              {labels.you} (شما)
-            </h3>
-            <div className='text-3xl font-bold text-red-600 mb-1'>
-              {total.YOU.toLocaleString('fa')}
-              <span className='text-sm px-1'>
-                /{(1100).toLocaleString('fa')}
-              </span>
-            </div>
+          <div className='text-center p-4 bg-red-50 rounded-lg text-red-600'>
+            <h3 className='text-sm font-semibold mb-1'>{labels.you} (شما)</h3>
+            {isShowRemain ? (
+              <div className='text-2xl font-bold h-9 mb-1'>{`${Math.floor(
+                total.YOU / 165
+              ).toLocaleString('fa')} دست و  ${(total.YOU % 165).toLocaleString(
+                'fa'
+              )}`}</div>
+            ) : (
+              <div className='text-3xl font-bold mb-1'>
+                {total.YOU.toLocaleString('fa')}
+                <span className='text-sm px-1'>
+                  /{(1100).toLocaleString('fa')}
+                </span>
+              </div>
+            )}
             <div className='w-full bg-gray-200 rounded-full h-2 mb-1 overflow-hidden relative'>
               <div
                 className='bg-red-600 h-2 transition-all duration-300 absolute end-0'
                 style={{ width: `${(100 * total.YOU) / 1100}%` }}
-              ></div>
+              />
             </div>
           </div>
         </div>
