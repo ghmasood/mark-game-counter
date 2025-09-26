@@ -158,7 +158,7 @@ export default function GameCounter() {
             {isShowRemain ? (
               <div className='text-xl font-bold h-9 mb-1'>{`${Math.floor(
                 total.WE / 165
-              ).toLocaleString('fa')} دست و  ${(total.WE % 165).toLocaleString(
+              ).toLocaleString('fa')} و  ${(total.WE % 165).toLocaleString(
                 'fa'
               )}`}</div>
             ) : (
@@ -181,7 +181,7 @@ export default function GameCounter() {
             {isShowRemain ? (
               <div className='text-xl font-bold h-9 mb-1'>{`${Math.floor(
                 total.YOU / 165
-              ).toLocaleString('fa')} دست و  ${(total.YOU % 165).toLocaleString(
+              ).toLocaleString('fa')} و  ${(total.YOU % 165).toLocaleString(
                 'fa'
               )}`}</div>
             ) : (
