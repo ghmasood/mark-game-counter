@@ -127,7 +127,7 @@ export default function GameCounter() {
           />
           <Convertshape2
             onClick={() => setIsShowRemain((prev) => !prev)}
-            variant={isShowRemain ? 'Bold' : 'Outline'}
+            variant={isShowRemain ? 'Bulk' : 'Outline'}
             size='1.5rem'
             className={` active:rotate-180 transition-transform cursor-pointer text-gray-800 duration-1000 ${
               isShowRemain ? 'rotate-90 ' : ''
@@ -156,7 +156,7 @@ export default function GameCounter() {
           <div className='text-center p-4 bg-blue-50 rounded-lg text-blue-600 '>
             <h3 className='text-sm font-semibold  mb-1'>{labels.we} (ما)</h3>
             {isShowRemain ? (
-              <div className='text-2xl font-bold h-9 mb-1'>{`${Math.floor(
+              <div className='text-xl font-bold h-9 mb-1'>{`${Math.floor(
                 total.WE / 165
               ).toLocaleString('fa')} دست و  ${(total.WE % 165).toLocaleString(
                 'fa'
@@ -179,7 +179,7 @@ export default function GameCounter() {
           <div className='text-center p-4 bg-red-50 rounded-lg text-red-600'>
             <h3 className='text-sm font-semibold mb-1'>{labels.you} (شما)</h3>
             {isShowRemain ? (
-              <div className='text-2xl font-bold h-9 mb-1'>{`${Math.floor(
+              <div className='text-xl font-bold h-9 mb-1'>{`${Math.floor(
                 total.YOU / 165
               ).toLocaleString('fa')} دست و  ${(total.YOU % 165).toLocaleString(
                 'fa'
